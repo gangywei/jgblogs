@@ -1,0 +1,104 @@
+@extends('comment.admin.a_model')
+@section('content')
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            博客
+            <small>历史</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 主页</a></li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="box">
+                    <div class="box-header">
+                        <form role="form" action="{{url('histories')}}/{{$edit or 'search'}}" method="post">
+                            {{ method_field('PUT') }}
+                            {{ csrf_field() }}
+                            <div class="input-group col-xs-3 input-group">
+                                <button type="button" data-toggle="modal" data-target="#histories" class="btn pull-left btn-info">新增历史</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <a href="{{url('histories')}}" id="hidsrc" style="display: none"></a>
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>历史介绍</th>
+                                <th>更新时间</th>
+                                <th>编辑历史</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($histories as $history)
+                                <tr>
+                                    <td class="data-content">{{$history->contents}}</td>
+                                    <td>{{$history->created_at}}</td>
+                                    <td  data-id="{{$history->id}}">
+                                        <a class="btn btn-primary btn-sm rev_histories" data-toggle=modal data-target=#histories>修改</a>
+                                        <a class="btn btn-danger btn-sm del_histories" >删除</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                            <tfoot>
+                            <tr></tr>
+                            </tfoot>
+                        </table>
+                        <div>
+                            {{ $histories->links() }}
+                        </div>
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+
+    {{--模态框--}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="histories">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增历史</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box-primary">
+                        <form role="form" id="model_from" action="{{url('histories')}}" method="post">
+                            {{ csrf_field() }}
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">历史内容</label>
+                                    <input type="test" name="contents" class="form-control" id="mod_content" placeholder="标签内容">
+                                </div>
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary" id="ch_lab" style="display: none">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" onclick="$('#ch_lab').click();" class="btn btn-primary">保存更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('js')
+    <script src="{{ asset('js/admin/histories.js') }}"></script>
+@endsection
